@@ -8,7 +8,7 @@
     <img src="https://img.shields.io/badge/Python-3.x-green.svg">
   </a>
   <a href="https://github.com/0xprateek/Photoroid">
-    <img src="https://img.shields.io/badge/Version-v1.0.0%20(stable)-blue.svg">
+    <img src="https://img.shields.io/badge/Version-v1.0.0%20(Beta)-blue.svg">
   </a>
   <a href="https://github.com/0xPrateek/Photoroid/blob/master/LICENSE">
     <img src="https://img.shields.io/badge/License-GPLv3-orange.svg">
@@ -19,18 +19,18 @@
 </p>
 
 ## About [Photoroid](https://github.com/0xprateek/Photoroid)
-Photoroid is a fastest, Light weight, easy to use image scanner tool. Photoroid is made using openCV with Python. It can be used to find similar image from a list of images without taking much time.Photoroid can be very helpful in finding similar images when number of images to scan is bigger.It can also be helpful in finding duplicate images.</p>
+Photoroid is the fastest, Lightweight, easy to use image scanner tool. Photoroid is made using OpenCV with Python. It can be used to find a similar image from a list of images without taking much time. Photoroid can be very helpful in finding similar images when the number of images to scan is bigger. It can also be helpful in finding duplicate images.</p>
 
 #### Key points
 
-1. Template image path(here) requires image path and this image will be scanned in the list of images.
-2. It's necessary that all the images from which you have to find similar images should be present at `/photoroid/core/images`
+1. Template image path(here) requires an image path and this image will be scanned in the list of images.
+2.  It's necessary that all the images from which you have to find similar images should be present at `/photoroid/core/images`.
 
 #### Improvements
 
-1. Currently photoroid supports only images with 640 X 480 dimension.Further improvements will add support to image of all the dimensions.</p>
+1. Currently, photoroid supports only images with 640 X 480 dimension. Further improvements will add support of scanning images of all the dimensions.</p>
 2. Currently we are using ![`cv2.matchTemplate()`](opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_imgproc/py_template_matching/py_template_matching.html) function for finding similar images. Further improvements will replace it with a new algorithm for more faster detection of similar images.</p>
-3. Currently it scans from offline images only.Further updates will add support for scanning images from online databases as well.</p>
+3. Currently, it scans into offline images only. Further updates will add support for scanning images from online databases as well.</p>
 
 
 ### Gallery
