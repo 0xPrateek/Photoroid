@@ -1,7 +1,5 @@
 import os
 import cv2
-import numpy as np
-import time
 import logo
 import platform
 import colors
