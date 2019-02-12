@@ -3,12 +3,8 @@ import cv2
 import logo
 import platform
 import colors
+import numpy as np
 
-# Some global declaration shits......!!!
-if(platform.system == 'Windows'):
-    path_symbol = "\\"
-else:
-    path_symbol = "/"
 
 def template_images(temp_image):
 
@@ -19,7 +15,7 @@ def template_images(temp_image):
         colors.error("Folder already exsist.")
         pass
 
-    os.chdir(os.getcwd() + "{}Template images".format(path_symbol))
+    os.chdir(os.path.join(str(os.getcwd()),'Template images'))
     colors.success("Directory set to new location ")
 
     # Loading Template image.
@@ -41,21 +37,21 @@ def template_images(temp_image):
 
 def check_match():
 
-    list_temp_images=os.listdir(os.getcwd()+"{}Template images".format(path_symbol))
+    list_temp_images=os.listdir(os.path.join(os.getcwd(),"Template images"))
     colors.success("template image list grabbed. ")
-    list_search_images=os.listdir(os.getcwd()+"{}images".format(path_symbol))
+    list_search_images= os.listdir(os.path.join(os.getcwd(),"images"))
     colors.success("search image list grabbed ")
     print("\n{}----------------------------------------------------------------------{}".format(colors.red,colors.green))
     print("\n\t {}:: Similar images found are :: \n".format(colors.lightgreen))
-    
+
     for path in list_search_images:
         checked = []
         pos = 0
-        src_image = cv2.imread('images{}'.format(path_symbol) + path, 1)
+        src_image= cv2.imread(os.path.join("images",path),1)
         src_gray = cv2.cvtColor(src_image, cv2.COLOR_BGR2GRAY)
         while(pos<12):
             template_path=list_temp_images[pos]
-            template_image=cv2.imread('Template images{}'.format(path_symbol)+template_path, 0)
+            template_image= cv2.imread(os.path.join("Template images",template_path),0)
             result = cv2.matchTemplate(src_gray, template_image, cv2.TM_CCOEFF_NORMED)
             thresh = 0.9
             loc = np.where(result > thresh)
@@ -65,7 +61,7 @@ def check_match():
             else:
                 checked.append("True")
             pos+= 1
-            
+
         if "False" not in checked:
             print("Image : {}".format(path))
 
@@ -80,7 +76,7 @@ if __name__ == '__main__':
     colors.process("Creating section of template image.")
     template_images(template)
     colors.success("12 Section of template image created.")
-    os.chdir("..{}".format(path_symbol))
-    colors.process("Setting 'Image matching' as current directory.")
+    os.chdir(os.path.join("..",""))
+    colors.process("Setting 'Core' as current directory.")
     check_match()
     print("{}\nThankyou for using my tool\n".format(colors.blue))
