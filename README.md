@@ -53,11 +53,11 @@ Photoroid is the fastest, Lightweight, easy to use image scanner tool. Photoroid
 
 #### Starting Stardox :
 
-1. `cd photoroid/core`
-2. `python3 photo.py`
-
-Example Usage : `python3 ./photo.py`
-
+1. `cd Photoroid/core`<br/>
+2.  a)  **Using Command line arguments** <br/>
+         `python3 photo.py /home/proton/Desktop/image1.jpg`<br/>
+    b)  **Without Command line arguments**<br/>
+     `    python3 photo.py`<br/>
 
 ### Contributing
 Any and all contributions, issues, features and tips are welcome.
