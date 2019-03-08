@@ -4,7 +4,8 @@ import logo
 import platform
 import colors
 import numpy as np
-
+import argparse
+import sys
 
 def template_images(temp_image):
 
@@ -70,8 +71,16 @@ if __name__ == '__main__':
 
     logo.banner()
     print("\n")
-    template_path = str(input("[ {}!{} ] Enter Template path : {}".format(colors.white,colors.end,colors.lightgreen)))
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-p','--path',help =' Path of template image')
+    if len(sys.argv)>1:
+        args = parser.parse_args()
+        template_path = args.path
+    else:
+        template_path = str(input("[ {}!{} ] Enter Template path : {}".format(colors.white,colors.end,colors.lightgreen)))
     print("\n")     # Some serious end of line, for UI purpose LOL ...
+
     template = cv2.imread(template_path, 1)
     colors.process("Creating section of template image.")
     template_images(template)
