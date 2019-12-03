@@ -16,6 +16,7 @@
   <a href="https://github.com/0xprateek/Photoroid">
     <img src="https://img.shields.io/badge/OS-Linux-orange.svg">
   </a>
+   <a href="https://gitter.im/Photoroid-gitter/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge"><img src="https://badges.gitter.im/Photoroid-gitter/community.svg" alt="DaSh"></a>
 </p>
 
 ## About [Photoroid](https://github.com/0xprateek/Photoroid)
@@ -51,7 +52,7 @@ Photoroid is the fastest, Lightweight, easy to use image scanner tool. Photoroid
 2. `cd photoroid`
 3. `pip install -r requirements.txt`
 
-#### Starting Stardox :
+#### Starting Photoroid :
 
 1. `cd Photoroid/core`<br/>
 2.  a)  **Using Command line arguments** <br/>
