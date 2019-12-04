@@ -4,19 +4,22 @@ import cv2
 import colors
 import logo
 
+template_image_dir_name = 'Template_images'
+check_image_dir = 'images'
+
 
 def template_images(temp_image):
     try:
-        os.mkdir('Template images')
-        colors.success("Folder Created")
+        os.mkdir(template_image_dir_name)
+        colors.success('Folder Created')
     except OSError:
-        colors.error("Folder already exists.")
+        colors.error('Folder already exists.')
 
-    os.chdir(os.path.join(str(os.getcwd()), 'Template images'))
-    colors.success("Directory set to new location ")
+    os.chdir(os.path.join(os.getcwd(), template_image_dir_name))
+    colors.success('Directory set to new location ')
 
     # Loading Template image.
-    colors.success("Image read into memory")
+    colors.success('Image read into memory')
 
     x = y = 0
     width = [160, 320, 480, 640]  # Respective width dimension for the template image.
@@ -41,10 +44,10 @@ def check_match():
     except:
         print("[-] Error importing numpy module.")
 
-    list_temp_images = os.listdir(os.path.join(os.getcwd(), "Template images"))
+    list_temp_images = os.listdir(os.path.join(os.getcwd(), template_image_dir_name))
     colors.success("Template image list grabbed.")
-    list_search_images = os.listdir(os.path.join(os.getcwd(), "images"))
-    colors.success("search image list grabbed ")
+    list_search_images = os.listdir(os.path.join(os.getcwd(), check_image_dir))
+    colors.success("Search image list grabbed ")
     print(
         "\n{}----------------------------------------------------------------------{}".format(colors.red, colors.green))
     print("\n\t {}:: Similar images found are :: \n".format(colors.lightgreen))
@@ -54,7 +57,7 @@ def check_match():
         pos = 0
 
         # Reading images to be matched one by one.
-        src_image = cv2.imread(os.path.join("images", path), 1)
+        src_image = cv2.imread(os.path.join(check_image_dir, path), 1)
 
         # Converting image to grayscale.
         src_gray = cv2.cvtColor(src_image, cv2.COLOR_BGR2GRAY)
@@ -62,7 +65,7 @@ def check_match():
         # Checking if all the templates are there in image or not.
         while pos < 12:
             template_path = list_temp_images[pos]
-            template_image = cv2.imread(os.path.join("Template images", template_path), 0)
+            template_image = cv2.imread(os.path.join(template_image_dir_name, template_path), 0)
 
             # Using cv2.matchTemplate() to check if template is found or not.
             result = cv2.matchTemplate(src_gray, template_image, cv2.TM_CCOEFF_NORMED)
