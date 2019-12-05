@@ -41,8 +41,9 @@ def template_images(temp_image):
 def check_match():
     try:
         import numpy as np
-    except:
+    except ImportError:
         print("[-] Error importing numpy module.")
+        exit(1)
 
     list_temp_images = os.listdir(os.path.join(os.getcwd(), template_image_dir_name))
     colors.success("Template image list grabbed.")
@@ -89,8 +90,9 @@ def main():
     try:
         import argparse
         import sys
-    except:
+    except ImportError:
         print("[-] Error importing argparse or sys module")
+        exit(1)
 
     parser = argparse.ArgumentParser()
     parser.add_argument('-p', '--path', help=' Path of template image')
