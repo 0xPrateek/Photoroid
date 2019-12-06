@@ -54,7 +54,6 @@ def check_match():
         {}\
         ----------------------------------------------------------------------\
         {}".format(colors.red, colors.green))
-    
     print("\n\t {}:: Similar images found are :: \n".format(colors.lightgreen))
 
     for path in list_search_images:
