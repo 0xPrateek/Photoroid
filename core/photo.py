@@ -50,7 +50,11 @@ def check_match():
     colors.success("Template image list grabbed.")
     list_search_images = os.listdir(os.path.join(os.getcwd(), "images"))
     colors.success("search image list grabbed ")
-    print("\n{}----------------------------------------------------------------------{}".format(colors.red, colors.green))
+    print("\n\
+        {}\
+        ----------------------------------------------------------------------\
+        {}".format(colors.red, colors.green))
+    
     print("\n\t {}:: Similar images found are :: \n".format(colors.lightgreen))
 
     for path in list_search_images:
