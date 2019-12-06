@@ -58,7 +58,7 @@ def check_match():
         pos = 0
 
         # Reading images to be matched one by one.
-        src_image = cv2.imread(os.path.join(check_image_dir, path), 1)
+        src_image = cv2.imread(os.path.join(check_image_dir, path), cv2.IMREAD_COLOR)
 
         # Converting image to grayscale.
         src_gray = cv2.cvtColor(src_image, cv2.COLOR_BGR2GRAY)
@@ -66,7 +66,7 @@ def check_match():
         # Checking if all the templates are there in image or not.
         while pos < 12:
             template_path = list_temp_images[pos]
-            template_image = cv2.imread(os.path.join(template_image_dir_name, template_path), 0)
+            template_image = cv2.imread(os.path.join(template_image_dir_name, template_path), cv2.IMREAD_GRAYSCALE)
 
             # Using cv2.matchTemplate() to check if template is found or not.
             result = cv2.matchTemplate(src_gray, template_image, cv2.TM_CCOEFF_NORMED)
@@ -95,23 +95,23 @@ def main():
         exit(1)
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('-p', '--path', help=' Path of template image')
+    parser.add_argument('-p', '--path', help=' Path of source image')
     if len(sys.argv) > 1:
         args = parser.parse_args()
-        template_path = args.path
+        source_path = args.path
     else:
-        template_path = str(
-            input("[ {}!{} ] Enter Template path : {}".format(colors.white, colors.end, colors.lightgreen)))
+        source_path = str(
+            input("[ {}!{} ] Enter path of source image: {}".format(colors.white, colors.end, colors.lightgreen)))
 
     print("\n")  # Some serious end of line, for UI purpose LOL ...
 
     # Getting the image to be searched
-    template = cv2.imread(template_path, 1)
-    colors.process("Creating section of template image.")
+    source = cv2.imread(source_path, cv2.IMREAD_COLOR)
+    colors.process("Creating template sections of source image.")
 
-    # Creating section of template image.
-    template_images(template)
-    colors.success("12 Section of template image created.")
+    # Creating template sections of source image.
+    template_images(source)
+    colors.success("12 template sections of source image created.")
     os.chdir(os.path.join("..", ""))
     colors.process("Setting 'Core' as current directory.")
     check_match()
