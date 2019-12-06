@@ -4,8 +4,10 @@ import cv2
 import colors
 import logo
 
-template_image_dir_name = 'Template_images'
-check_image_dir = 'images'
+template_image_dir_name = ''
+target_images_dir_name = ''
+template_image_dir_name_default = 'Template_images'
+target_images_dir_name_default = 'images'
 
 
 def template_images(temp_image):
@@ -47,7 +49,7 @@ def check_match():
 
     list_temp_images = os.listdir(os.path.join(os.getcwd(), template_image_dir_name))
     colors.success("Template image list grabbed.")
-    list_search_images = os.listdir(os.path.join(os.getcwd(), check_image_dir))
+    list_search_images = os.listdir(os.path.join(os.getcwd(), target_images_dir_name))
     colors.success("Search image list grabbed ")
     print(
         "\n{}----------------------------------------------------------------------{}".format(colors.red, colors.green))
@@ -58,7 +60,7 @@ def check_match():
         pos = 0
 
         # Reading images to be matched one by one.
-        src_image = cv2.imread(os.path.join(check_image_dir, path), cv2.IMREAD_COLOR)
+        src_image = cv2.imread(os.path.join(target_images_dir_name, path), cv2.IMREAD_COLOR)
 
         # Converting image to grayscale.
         src_gray = cv2.cvtColor(src_image, cv2.COLOR_BGR2GRAY)
@@ -84,6 +86,11 @@ def check_match():
 
 
 def main():
+    global template_image_dir_name
+    global target_images_dir_name
+
+    source_path = None
+
     logo.banner()
     print("\n")
 
@@ -94,12 +101,23 @@ def main():
         print("[-] Error importing argparse or sys module")
         exit(1)
 
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description='A program which given a source image and a set of target images '
+                                                 'will match the source image to the target images to find its matches')
     parser.add_argument('-p', '--path', help=' Path of source image')
+    parser.add_argument('-v', '--version', action='version', version='%(prog)s 1.0.0(beta)', help='Prints the version '
+                                                                                                  'of Photoroid')
+    parser.add_argument('-t', '--target', help=' Path of target images directory',
+                        default=target_images_dir_name_default)
+    parser.add_argument('-o', '--output', help='Path of template images directory',
+                        default=template_image_dir_name_default)
+
     if len(sys.argv) > 1:
         args = parser.parse_args()
         source_path = args.path
-    else:
+        template_image_dir_name = args.target
+        target_images_dir_name = args.output
+
+    if source_path is None:
         source_path = str(
             input("[ {}!{} ] Enter path of source image: {}".format(colors.white, colors.end, colors.lightgreen)))
 
