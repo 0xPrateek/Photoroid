@@ -12,8 +12,9 @@ target_images_dir_name_default = 'images'
 
 def template_images(temp_image):
     try:
-        os.mkdir(template_image_dir_name)
+        os.mkdir(os.path.join(os.getcwd(), template_image_dir_name))
         colors.success('Folder Created')
+        # TODO: Differentiate between folder already exists and permission denied
     except OSError:
         colors.error('Folder already exists.')
 
@@ -114,8 +115,8 @@ def main():
     if len(sys.argv) > 1:
         args = parser.parse_args()
         source_path = args.path
-        template_image_dir_name = args.target
-        target_images_dir_name = args.output
+        template_image_dir_name = args.output
+        target_images_dir_name = args.target
 
     if source_path is None:
         source_path = str(
@@ -127,10 +128,12 @@ def main():
     source = cv2.imread(source_path, cv2.IMREAD_COLOR)
     colors.process("Creating template sections of source image.")
 
+    start_dir = os.getcwd()  # Saving the start directory
+
     # Creating template sections of source image.
     template_images(source)
     colors.success("12 template sections of source image created.")
-    os.chdir(os.path.join("..", ""))
+    os.chdir(start_dir)
     colors.process("Setting 'Core' as current directory.")
     check_match()
     print("{}\nThank you for using my tool\n".format(colors.blue))
