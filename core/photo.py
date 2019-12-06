@@ -3,6 +3,7 @@ import os
 import cv2
 import colors
 import logo
+import time
 
 
 def template_images(temp_image):
@@ -103,9 +104,12 @@ if __name__ == '__main__':
     colors.process("Creating section of template image.")
 
     # Creating secotion of template image.
+    initial_time = time.time()
     template_images(template)
+    colors.info("Time to cut: " + str(time.time() - initial_time))
     colors.success("12 Section of template image created.")
     os.chdir(os.path.join("..",""))
     colors.process("Setting 'Core' as current directory.")
     check_match()
+    colors.info("Total time: " + str(time.time() - initial_time))
     print("{}\nThankyou for using my tool\n".format(colors.blue))
