@@ -11,12 +11,17 @@ target_images_dir_name_default = 'images'
 
 
 def template_images(temp_image):
+    template_image_dir_path = os.path.join(os.getcwd(), template_image_dir_name)
     try:
-        os.mkdir(os.path.join(os.getcwd(), template_image_dir_name))
-        colors.success('Folder Created')
-        # TODO: Differentiate between folder already exists and permission denied
+        if os.path.isdir(template_image_dir_name):
+            colors.info('Template image sections folder already exists.')
+        else:
+            os.mkdir(template_image_dir_path)
+            colors.success('Template image sections folder created.')
     except OSError:
-        colors.error('Folder already exists.')
+        colors.error('Permission denied at {}: Cannot create template image sections folder'
+                     .format(template_image_dir_path))
+        exit(1)
 
     os.chdir(os.path.join(os.getcwd(), template_image_dir_name))
     colors.success('Directory set to new location ')
