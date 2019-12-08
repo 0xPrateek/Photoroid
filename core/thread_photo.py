@@ -26,7 +26,7 @@ def template_images(temp_image):
         colors.error(
             'Permission denied at {}:\
             Cannot create template image sections folder'
-                     .format(template_image_dir_path))
+            .format(template_image_dir_path))
         exit(1)
 
     os.chdir(os.path.join(os.getcwd(), template_image_dir_name))
@@ -160,17 +160,17 @@ def main():
         exit(1)
 
     parser = argparse.ArgumentParser(
-        description=
-        'A program which given a source image and a set of target images '
+        description='A program which given a source image'
+        'and a set of target images '
         'will match the source image to the target images to find its matches')
     parser.add_argument('-p', '--path', help=' Path of source image')
-    parser.add_argument('-v', '--version', action='version', 
-                        version='%(prog)s 1.0.0(beta)', 
+    parser.add_argument('-v', '--version', action='version',
+                        version='%(prog)s 1.0.0(beta)',
                         help='Prints the version of Photoroid')
-    parser.add_argument('-t', '--target', 
+    parser.add_argument('-t', '--target',
                         help=' Path of target images directory',
                         default=target_images_dir_name_default)
-    parser.add_argument('-o', '--output', 
+    parser.add_argument('-o', '--output',
                         help='Path of template images directory',
                         default=template_image_dir_name_default)
 
@@ -182,10 +182,8 @@ def main():
 
     if template_image_dir_name is '':
         template_image_dir_name = template_image_dir_name_default
-
     if target_images_dir_name is '':
         target_images_dir_name = target_images_dir_name_default
-
     if source_path is None:
         source_path = str(
             input("[ {}!{} ] Enter path of source image: {}"

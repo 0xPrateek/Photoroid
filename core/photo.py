@@ -135,13 +135,10 @@ def main():
         source_path = args.path
         template_image_dir_name = args.output
         target_images_dir_name = args.target
-        
     if template_image_dir_name is '':
         template_image_dir_name = template_image_dir_name_default
-    
     if target_images_dir_name is '':
         target_images_dir_name = target_images_dir_name_default
-
     if source_path is None:
         source_path = str(
             input("[ {}!{} ] Enter path of source image: {}".format(colors.white, colors.end, colors.lightgreen)))
