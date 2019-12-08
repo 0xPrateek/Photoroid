@@ -23,8 +23,10 @@ def template_images(temp_image):
             os.mkdir(template_image_dir_path)
             colors.success('Template image sections folder created.')
     except OSError:
-        colors.error('Permission denied at {}: Cannot create template image sections folder, {}'
-                     .format(template_image_dir_path), OSError)
+        colors.error(
+            'Permission denied at {}: \
+            Cannot create template image sections folder'
+                     .format(template_image_dir_path))
         exit(1)
 
     os.chdir(os.path.join(os.getcwd(), template_image_dir_name))
@@ -133,7 +135,7 @@ def main():
         source_path = args.path
         template_image_dir_name = args.output
         target_images_dir_name = args.target
-
+        
     if template_image_dir_name is '':
         template_image_dir_name = template_image_dir_name_default
     

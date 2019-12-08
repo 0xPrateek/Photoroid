@@ -23,8 +23,10 @@ def template_images(temp_image):
             os.mkdir(template_image_dir_path)
             colors.success('Template image sections folder created.')
     except OSError:
-        colors.error('Permission denied at {}: Cannot create template image sections folder, {}'
-                     .format(template_image_dir_path), OSError)
+        colors.error(
+            'Permission denied at {}:\
+            Cannot create template image sections folder'
+                     .format(template_image_dir_path))
         exit(1)
 
     os.chdir(os.path.join(os.getcwd(), template_image_dir_name))
@@ -68,7 +70,10 @@ def check_match():
         os.path.join(os.getcwd(), target_images_dir_name))
     colors.success("Search images list grabbed")
     print(
-        "\n{}----------------------------------------------------------------------{}".format(colors.red, colors.green))
+        "\n{}\
+        ----------------------------------------------------------------------\
+        {}"
+        .format(colors.red, colors.green))
     print("\n\t {}:: Similar images found are :: \n".format(colors.lightgreen))
 
     image_thread_process = []
@@ -154,14 +159,19 @@ def main():
         print("[-] Error importing argparse or sys module")
         exit(1)
 
-    parser = argparse.ArgumentParser(description='A program which given a source image and a set of target images '
-                                                 'will match the source image to the target images to find its matches')
+    parser = argparse.ArgumentParser(
+        description=
+        'A program which given a source image and a set of target images '
+        'will match the source image to the target images to find its matches')
     parser.add_argument('-p', '--path', help=' Path of source image')
-    parser.add_argument('-v', '--version', action='version', version='%(prog)s 1.0.0(beta)', help='Prints the version '
-                                                                                                  'of Photoroid')
-    parser.add_argument('-t', '--target', help=' Path of target images directory',
+    parser.add_argument('-v', '--version', action='version', 
+                        version='%(prog)s 1.0.0(beta)', 
+                        help='Prints the version of Photoroid')
+    parser.add_argument('-t', '--target', 
+                        help=' Path of target images directory',
                         default=target_images_dir_name_default)
-    parser.add_argument('-o', '--output', help='Path of template images directory',
+    parser.add_argument('-o', '--output', 
+                        help='Path of template images directory',
                         default=template_image_dir_name_default)
 
     if len(sys.argv) > 1:
@@ -178,7 +188,8 @@ def main():
 
     if source_path is None:
         source_path = str(
-            input("[ {}!{} ] Enter path of source image: {}".format(colors.white, colors.end, colors.lightgreen)))
+            input("[ {}!{} ] Enter path of source image: {}"
+                  .format(colors.white, colors.end, colors.lightgreen)))
 
     print("\n")  # Some serious end of line, for UI purpose LOL ...
 
