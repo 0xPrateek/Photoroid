@@ -5,20 +5,33 @@ import logo
 from threading import Thread as th
 import time
 
+template_image_dir_name = ''
+target_images_dir_name = ''
+template_image_dir_name_default = 'Template_images'
+target_images_dir_name_default = 'images'
+
 
 def template_images(temp_image):
 
+    template_image_dir_path = os.path.join(
+        os.getcwd(), template_image_dir_name)
+    print(template_image_dir_path)
     try:
-        os.mkdir('Template images')
-        colors.success("Template folder created")
-    except:
-        colors.error("Template folder already exists")
+        if os.path.isdir(template_image_dir_name):
+            colors.info('Template image sections folder already exists.')
+        else:
+            os.mkdir(template_image_dir_path)
+            colors.success('Template image sections folder created.')
+    except OSError:
+        colors.error('Permission denied at {}: Cannot create template image sections folder, {}'
+                     .format(template_image_dir_path), OSError)
+        exit(1)
 
-    os.chdir(os.path.join(str(os.getcwd()), 'Template images'))
-    colors.success("Directory set to new location")
+    os.chdir(os.path.join(os.getcwd(), template_image_dir_name))
+    colors.success('Directory set to new location ')
 
     # Loading Template image.
-    colors.success("Template Image read into memory")
+    colors.success('Image read into memory')
 
     x = y = 0
     width = [160, 320, 480, 640]
@@ -46,14 +59,16 @@ def template_images(temp_image):
         process.join()
 
 
-
 def check_match():
 
-    list_temp_images = os.listdir(os.path.join(os.getcwd(), "Template images"))
+    list_temp_images = os.listdir(os.path.join(
+        os.getcwd(), template_image_dir_name))
     colors.success("Template image list grabbed.")
-    list_search_images = os.listdir(os.path.join(os.getcwd(), "images"))
+    list_search_images = os.listdir(
+        os.path.join(os.getcwd(), target_images_dir_name))
     colors.success("Search images list grabbed")
-    print("\n{}----------------------------------------------------------------------{}".format(colors.red, colors.green))
+    print(
+        "\n{}----------------------------------------------------------------------{}".format(colors.red, colors.green))
     print("\n\t {}:: Similar images found are :: \n".format(colors.lightgreen))
 
     image_thread_process = []
@@ -85,8 +100,9 @@ def thread_checker(src_path, list_temp_images):
 
     try:
         import numpy as np
-    except:
-        print("[-] Error importing module.")
+    except ImportError:
+        print("[-] Error importing numpy module.")
+        exit(1)
 
     checked = []
     pos = 0
@@ -101,7 +117,7 @@ def thread_checker(src_path, list_temp_images):
     while(pos < 12):
         template_path = list_temp_images[pos]
         template_image = cv2.imread(os.path.join(
-            "Template images", template_path), 0)
+                template_image_dir_name, template_path), cv2.IMREAD_GRAYSCALE)
 
         # Using cv2.matchTemplate() to check if template is found or not.
         result = cv2.matchTemplate(
@@ -121,7 +137,12 @@ def thread_checker(src_path, list_temp_images):
         print("Image : {}".format(src_path))
 
 
-if __name__ == '__main__':
+def main():
+
+    global template_image_dir_name
+    global target_images_dir_name
+
+    source_path = None
 
     logo.banner()
     print("\n")
@@ -129,27 +150,47 @@ if __name__ == '__main__':
     try:
         import argparse
         import sys
-    except:
-        print("[-] Error importing module")
+    except ImportError:
+        print("[-] Error importing argparse or sys module")
+        exit(1)
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-p', '--path', help=' Path of template image')
+    parser = argparse.ArgumentParser(description='A program which given a source image and a set of target images '
+                                                 'will match the source image to the target images to find its matches')
+    parser.add_argument('-p', '--path', help=' Path of source image')
+    parser.add_argument('-v', '--version', action='version', version='%(prog)s 1.0.0(beta)', help='Prints the version '
+                                                                                                  'of Photoroid')
+    parser.add_argument('-t', '--target', help=' Path of target images directory',
+                        default=target_images_dir_name_default)
+    parser.add_argument('-o', '--output', help='Path of template images directory',
+                        default=template_image_dir_name_default)
+
     if len(sys.argv) > 1:
         args = parser.parse_args()
-        template_path = args.path
-    else:
-        template_path = str(input("[ {}!{} ] Enter Template path : {}".format(
-            colors.white, colors.end, colors.lightgreen)))
+        source_path = args.path
+        template_image_dir_name = args.output
+        target_images_dir_name = args.target
 
-    print("\n")     # Some serious end of line, for UI purpose LOL ...
+    if template_image_dir_name is '':
+        template_image_dir_name = template_image_dir_name_default
 
-    # Getting the image to be serached
-    template = cv2.imread(template_path, 1)
-    colors.process("Creating section of template image.")
+    if target_images_dir_name is '':
+        target_images_dir_name = target_images_dir_name_default
+
+    if source_path is None:
+        source_path = str(
+            input("[ {}!{} ] Enter path of source image: {}".format(colors.white, colors.end, colors.lightgreen)))
+
+    print("\n")  # Some serious end of line, for UI purpose LOL ...
+
+    # Getting the image to be searched
+    source = cv2.imread(source_path, cv2.IMREAD_COLOR)
+    colors.process("Creating template sections of source image.")
+
+    start_dir = os.getcwd()  # Saving the start directory
 
     # Creating secotion of template image.
     initial_time = time.time()
-    template_images(template)
+    template_images(source)
     colors.info("Time to cut: " + str(time.time() - initial_time))
     colors.success("12 Section of template image created.")
     os.chdir(os.path.join("..", ""))
@@ -158,3 +199,7 @@ if __name__ == '__main__':
     colors.info("Total time of all threads: " +
                 str(time.time() - initial_time))
     print("{}\nThankyou for using my tool\n".format(colors.blue))
+
+
+if __name__ == '__main__':
+    main()
