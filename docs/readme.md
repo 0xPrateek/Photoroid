@@ -46,6 +46,11 @@ Each and every sub-template is checked against the source image, and if the resu
     * ```-t``` : Path of target image directory
     * ```-o``` : Path of sub-template directory
 
+### Gallery
+
+**Execution parameters**
+![Image1](./desc.png)
+
 ## Performance
 <p>
 At present, the algorithm is in the initial stages.<br>
