@@ -14,10 +14,13 @@ def check_match(source):
     except ImportError:
         print("[-] Error importing numpy module.")
         exit(1)
-    list_search_images = os.listdir(os.path.join(os.getcwd(), target_images_dir_name))
+    list_search_images = os.listdir(
+        os.path.join(os.getcwd(), target_images_dir_name))
     colors.success("Search image list grabbed ")
     print(
-        "\n{}----------------------------------------------------------------------{}".format(
+        "\n{}\
+        ----------------------------------------------------------------------\
+        {}".format(
             colors.red, colors.green
         )
     )
@@ -70,7 +73,8 @@ def main():
         exit(1)
 
     parser = argparse.ArgumentParser(
-        description="A program which given a source image and a set of target images "
+        description='A program which given a source image'
+        'and a set of target images '
         "will match the source image to the target images to find its matches"
     )
     parser.add_argument("-p", "--path", help=" Path of source image")
