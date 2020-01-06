@@ -1,0 +1,14 @@
+appdirs==1.4.3
+attrs==19.3.0
+autopep8==1.4.4
+black==19.10b0
+Click==7.0
+colorama==0.4.3
+numpy==1.17.4
+opencv-contrib-python==4.0.0.21
+opencv-python==4.1.2.30
+pathspec==0.6.0
+pycodestyle==2.5.0
+regex==2019.12.20
+toml==0.10.0
+typed-ast==1.4.0
