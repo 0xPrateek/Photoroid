@@ -230,7 +230,8 @@ def main():
     # colors.info("Time to cut: " + str(time.time() - initial_time))
     # colors.success("12 Section of template image created.")
     logger.debug(
-        "Template image cutting done. 12 template sections of source image created."
+        "Template image cutting done.\
+         12 template sections of source image created."
     )
     logger.debug("Time to cut: " + str(time.time() - initial_time))
     os.chdir(os.path.join("..", ""))

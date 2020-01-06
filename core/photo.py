@@ -98,7 +98,9 @@ def check_match():
     colors.success("Search image list grabbed ")
     logger.debug("Search image list grabbed ")
     print(
-        "\n{}----------------------------------------------------------------------{}"
+        "\n{}\
+        ----------------------------------------------------------------------\
+        {}"
         .format(
             colors.red, colors.green
         )
@@ -114,9 +116,9 @@ def check_match():
             src_image = cv2.imread(
                 os.path.join(target_images_dir_name, path), cv2.IMREAD_COLOR
             )
-        except:
+        except IOError:
             logger.error(
-                "Import error: {}".format(
+                "Image import error: {}".format(
                     os.path.join(target_images_dir_name, path))
             )
         # Converting image to grayscale.
@@ -161,10 +163,10 @@ def main():
         # print("[-] Error importing argparse or sys module")
         logger.error(" Error importing argparse or sys module")
         exit(1)
-    parser = argparse.ArgumentParser(
-        description="A program which given a source image and a set of target images "
-        "will match the source image to the target images to find its matches"
-    )
+        parser = argparse.ArgumentParser(
+        description='A program which given a source image'
+        'and a set of target images '
+        'will match the source image to the target images to find its matches'
     parser.add_argument("-p", "--path", help=" Path of source image")
     parser.add_argument(
         "-v",
@@ -217,7 +219,8 @@ def main():
     initial_time = time.time()
     template_images(source)
     logger.debug(
-        "Template image cutting done. 12 template sections of source image created."
+        "Template image cutting done.\
+         12 template sections of source image created."
     )
     logger.debug("Time to cut: " + str(time.time() - initial_time))
     # colors.success("12 template sections of source image created.")
