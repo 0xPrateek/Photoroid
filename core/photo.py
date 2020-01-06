@@ -163,10 +163,10 @@ def main():
         # print("[-] Error importing argparse or sys module")
         logger.error(" Error importing argparse or sys module")
         exit(1)
-        parser = argparse.ArgumentParser(
+    parser = argparse.ArgumentParser(
         description='A program which given a source image'
         'and a set of target images '
-        'will match the source image to the target images to find its matches'
+        'will match the source image to the target images to find its matches')
     parser.add_argument("-p", "--path", help=" Path of source image")
     parser.add_argument(
         "-v",
