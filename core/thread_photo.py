@@ -1,9 +1,22 @@
 import os
 import cv2
-import colors
-import logo
 from threading import Thread as th
 import time
+import logging
+logging.basicConfig(
+    filename="logger_thread.log",
+    format="%(asctime)s %(levelname)s: %(message)s",
+    level=logging.DEBUG,
+    datefmt="%m/%d/%Y %I:%M:%S %p",
+)
+logger = logging.getLogger()
+
+try:
+    import colors
+    import logo
+except ImportError:
+    logger.error(" Error importing colors an logo module")
+    exit(1)
 
 template_image_dir_name = ''
 target_images_dir_name = ''
@@ -19,21 +32,30 @@ def template_images(temp_image):
     try:
         if os.path.isdir(template_image_dir_name):
             colors.info('Template image sections folder already exists.')
+            logger.warning("Template image sections folder already exists.")
         else:
             os.mkdir(template_image_dir_path)
             colors.success('Template image sections folder created.')
+            logger.debug("Template image sections folder created.")
     except OSError:
         colors.error(
             'Permission denied at {}:\
             Cannot create template image sections folder'
             .format(template_image_dir_path))
+        logger.error(
+            "Permission denied at {}: \
+            Cannot create template image sections folder".format(
+                template_image_dir_path
+            )
+        )
         exit(1)
 
     os.chdir(os.path.join(os.getcwd(), template_image_dir_name))
     colors.success('Directory set to new location ')
-
+    logger.debug("Directory set to new location ")
     # Loading Template image.
     colors.success('Image read into memory')
+    logger.debug("Image read into memory")
 
     x = y = 0
     width = [160, 320, 480, 640]
@@ -66,9 +88,11 @@ def check_match():
     list_temp_images = os.listdir(os.path.join(
         os.getcwd(), template_image_dir_name))
     colors.success("Template image list grabbed.")
+    logger.debug("Template image list grabbed.")
     list_search_images = os.listdir(
         os.path.join(os.getcwd(), target_images_dir_name))
     colors.success("Search images list grabbed")
+    logger.debug("Search images list grabbed")
     print(
         "\n{}\
         ----------------------------------------------------------------------\
@@ -93,6 +117,7 @@ def check_match():
         process.join()
 
     colors.success("Threading function completed")
+    logger.debug("Threading function completed")
 
 
 def thread_breaker(x, y, h, w, temp_image, count):
@@ -107,6 +132,7 @@ def thread_checker(src_path, list_temp_images):
         import numpy as np
     except ImportError:
         print("[-] Error importing numpy module.")
+        logger.error("Error importing numpy module")
         exit(1)
 
     checked = []
@@ -122,7 +148,7 @@ def thread_checker(src_path, list_temp_images):
     while(pos < 12):
         template_path = list_temp_images[pos]
         template_image = cv2.imread(os.path.join(
-                template_image_dir_name, template_path), cv2.IMREAD_GRAYSCALE)
+            template_image_dir_name, template_path), cv2.IMREAD_GRAYSCALE)
 
         # Using cv2.matchTemplate() to check if template is found or not.
         result = cv2.matchTemplate(
@@ -157,6 +183,7 @@ def main():
         import sys
     except ImportError:
         print("[-] Error importing argparse or sys module")
+        logger.error("Error importing argparse or sys module")
         exit(1)
 
     parser = argparse.ArgumentParser(
@@ -194,21 +221,30 @@ def main():
     # Getting the image to be searched
     source = cv2.imread(source_path, cv2.IMREAD_COLOR)
     colors.process("Creating template sections of source image.")
-
+    logger.debug("Creating template sections of source image.")
     start_dir = os.getcwd()  # Saving the start directory
 
     # Creating secotion of template image.
     initial_time = time.time()
     template_images(source)
-    colors.info("Time to cut: " + str(time.time() - initial_time))
-    colors.success("12 Section of template image created.")
+    # colors.info("Time to cut: " + str(time.time() - initial_time))
+    # colors.success("12 Section of template image created.")
+    logger.debug(
+        "Template image cutting done. 12 template sections of source image created."
+    )
+    logger.debug("Time to cut: " + str(time.time() - initial_time))
     os.chdir(os.path.join("..", ""))
     colors.process("Setting 'Core' as current directory.")
+    logger.debug("Setting 'Core' as current directory.")
     check_match()
     colors.info("Total time of all threads: " +
                 str(time.time() - initial_time))
+    logger.debug("Total time of all threads: " +
+                 str(time.time() - initial_time))
     print("{}\nThankyou for using my tool\n".format(colors.blue))
 
 
 if __name__ == '__main__':
+    logger.info("Started")
     main()
+    logger.info("Ended")
