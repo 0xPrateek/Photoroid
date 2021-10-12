@@ -1,4 +1,4 @@
 colorama==0.4.3
 numpy==1.17.4
-opencv-contrib-python==4.0.0.21
+opencv-contrib-python==4.1.1.26
 opencv-python==4.1.2.30
