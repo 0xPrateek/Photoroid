@@ -1,14 +1,28 @@
 # Importing modules
 import os
 import cv2
-import colors
-import logo
 import time
+import logging
+logging.basicConfig(
+    filename="logger.log",
+    format="%(asctime)s %(levelname)s: %(message)s",
+    level=logging.DEBUG,
+    datefmt="%m/%d/%Y %I:%M:%S %p",
+)
+logger = logging.getLogger()
 
-template_image_dir_name = ''
-target_images_dir_name = ''
-template_image_dir_name_default = 'Template_images'
-target_images_dir_name_default = 'images'
+try:
+    import colors
+    import logo
+except ImportError:
+    logger.error(" Error importing colors an logo module")
+    exit(1)
+
+
+template_image_dir_name = ""
+target_images_dir_name = ""
+template_image_dir_name_default = "Template_images"
+target_images_dir_name_default = "images"
 
 
 def template_images(temp_image):
@@ -18,22 +32,34 @@ def template_images(temp_image):
     print(template_image_dir_path)
     try:
         if os.path.isdir(template_image_dir_name):
-            colors.info('Template image sections folder already exists.')
+            colors.info("Template image sections folder already exists.")
+            logger.warning("Template image sections folder already exists.")
         else:
             os.mkdir(template_image_dir_path)
-            colors.success('Template image sections folder created.')
+            colors.success("Template image sections folder created.")
+            logger.debug("Template image sections folder created.")
     except OSError:
         colors.error(
-            'Permission denied at {}: \
-            Cannot create template image sections folder'
-                     .format(template_image_dir_path))
+            "Permission denied at {}: \
+            Cannot create template image sections folder".format(
+                template_image_dir_path
+            )
+        )
+        logger.error(
+            "Permission denied at {}: \
+            Cannot create template image sections folder".format(
+                template_image_dir_path
+            )
+        )
         exit(1)
 
     os.chdir(os.path.join(os.getcwd(), template_image_dir_name))
-    colors.success('Directory set to new location ')
+    colors.success("Directory set to new location ")
+    logger.debug("Directory set to new location ")
 
     # Loading Template image.
-    colors.success('Image read into memory')
+    colors.success("Image read into memory")
+    logger.debug("Image read into memory")
 
     x = y = 0
     # Respective width dimension for the template image.
@@ -46,8 +72,9 @@ def template_images(temp_image):
         for w in width:
             image_section = temp_image[y:h, x:w]  # Creating section of image.
             x = w
-            cv2.imwrite(str(count) + ".jpg",
-                        image_section)  # writing each template image section to template directory.
+            cv2.imwrite(
+                str(count) + ".jpg", image_section
+            )  # writing each template image section to template directory.
             count += 1
         x = 0
         y = h
@@ -59,16 +86,25 @@ def check_match():
         import numpy as np
     except ImportError:
         print("[-] Error importing numpy module.")
+        logger.error("Error importing numpy module")
         exit(1)
 
     list_temp_images = os.listdir(os.path.join(
         os.getcwd(), template_image_dir_name))
     colors.success("Template image list grabbed.")
+    logger.debug("Template image list grabbed.")
     list_search_images = os.listdir(
         os.path.join(os.getcwd(), target_images_dir_name))
     colors.success("Search image list grabbed ")
+    logger.debug("Search image list grabbed ")
     print(
-        "\n{}----------------------------------------------------------------------{}".format(colors.red, colors.green))
+        "\n{}\
+        ----------------------------------------------------------------------\
+        {}"
+        .format(
+            colors.red, colors.green
+        )
+    )
     print("\n\t {}:: Similar images found are :: \n".format(colors.lightgreen))
 
     for path in list_search_images:
@@ -76,17 +112,25 @@ def check_match():
         pos = 0
 
         # Reading images to be matched one by one.
-        src_image = cv2.imread(os.path.join(
-            target_images_dir_name, path), cv2.IMREAD_COLOR)
-
+        try:
+            src_image = cv2.imread(
+                os.path.join(target_images_dir_name, path), cv2.IMREAD_COLOR
+            )
+        except IOError:
+            logger.error(
+                "Image import error: {}".format(
+                    os.path.join(target_images_dir_name, path))
+            )
         # Converting image to grayscale.
         src_gray = cv2.cvtColor(src_image, cv2.COLOR_BGR2GRAY)
 
         # Checking if all the templates are there in image or not.
         while pos < 12:
             template_path = list_temp_images[pos]
-            template_image = cv2.imread(os.path.join(
-                template_image_dir_name, template_path), cv2.IMREAD_GRAYSCALE)
+            template_image = cv2.imread(
+                os.path.join(template_image_dir_name, template_path),
+                cv2.IMREAD_GRAYSCALE,
+            )
 
             # Using cv2.matchTemplate() to check if template is found or not.
             result = cv2.matchTemplate(
@@ -109,44 +153,64 @@ def main():
     global target_images_dir_name
 
     source_path = None
-
-    logo.banner()
     print("\n")
+    logo.banner()
 
     try:
         import argparse
         import sys
     except ImportError:
-        print("[-] Error importing argparse or sys module")
+        # print("[-] Error importing argparse or sys module")
+        logger.error(" Error importing argparse or sys module")
         exit(1)
-
-    parser = argparse.ArgumentParser(description='A program which given a source image and a set of target images '
-                                                 'will match the source image to the target images to find its matches')
-    parser.add_argument('-p', '--path', help=' Path of source image')
-    parser.add_argument('-v', '--version', action='version', version='%(prog)s 1.0.0(beta)', help='Prints the version '
-                                                                                                  'of Photoroid')
-    parser.add_argument('-t', '--target', help=' Path of target images directory',
-                        default=target_images_dir_name_default)
-    parser.add_argument('-o', '--output', help='Path of template images directory',
-                        default=template_image_dir_name_default)
+    parser = argparse.ArgumentParser(
+        description='A program which given a source image'
+        'and a set of target images '
+        'will match the source image to the target images to find its matches')
+    parser.add_argument("-p", "--path", help=" Path of source image")
+    parser.add_argument(
+        "-v",
+        "--version",
+        action="version",
+        version="%(prog)s 1.0.0(beta)",
+        help="Prints the version " "of Photoroid",
+    )
+    parser.add_argument(
+        "-t",
+        "--target",
+        help=" Path of target images directory",
+        default=target_images_dir_name_default,
+    )
+    parser.add_argument(
+        "-o",
+        "--output",
+        help="Path of template images directory",
+        default=template_image_dir_name_default,
+    )
 
     if len(sys.argv) > 1:
         args = parser.parse_args()
         source_path = args.path
         template_image_dir_name = args.output
         target_images_dir_name = args.target
-    if template_image_dir_name is '':
+    if template_image_dir_name is "":
         template_image_dir_name = template_image_dir_name_default
-    if target_images_dir_name is '':
+    if target_images_dir_name is "":
         target_images_dir_name = target_images_dir_name_default
     if source_path is None:
         source_path = str(
-            input("[ {}!{} ] Enter path of source image: {}".format(colors.white, colors.end, colors.lightgreen)))
+            input(
+                "[ {}!{} ] Enter path of source image: {}".format(
+                    colors.white, colors.end, colors.lightgreen
+                )
+            )
+        )
 
     print("\n")  # Some serious end of line, for UI purpose LOL ...
 
     # Getting the image to be searched
     source = cv2.imread(source_path, cv2.IMREAD_COLOR)
+    logger.debug("Template image cutting function started")
     colors.process("Creating template sections of source image.")
 
     start_dir = os.getcwd()  # Saving the start directory
@@ -154,14 +218,23 @@ def main():
     # Creating template sections of source image.
     initial_time = time.time()
     template_images(source)
-    colors.info("Time to cut: " + str(time.time() - initial_time))
-    colors.success("12 template sections of source image created.")
+    logger.debug(
+        "Template image cutting done.\
+         12 template sections of source image created."
+    )
+    logger.debug("Time to cut: " + str(time.time() - initial_time))
+    # colors.success("12 template sections of source image created.")
     os.chdir(start_dir)
     colors.process("Setting 'Core' as current directory.")
+    logger.debug("Setting 'Core' as current directory.")
     check_match()
     colors.info("Total time: " + str(time.time() - initial_time))
+    logger.debug("Total time of all threads: " +
+                 str(time.time() - initial_time))
     print("{}\nThank you for using my tool\n".format(colors.blue))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
+    logger.info("Started")
     main()
+    logger.info("Ended")
